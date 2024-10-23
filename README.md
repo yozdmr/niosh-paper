@@ -6,7 +6,7 @@ This repository contains all of the code used to perform the analyses discussed 
 ## Requirements
 
 ### RStudio
-Needs:
+TODO needs:
  - RStudio version
  - Libraries used
 
@@ -19,7 +19,7 @@ Python libraries to install:
 pip install pycaret[full]
 ```
 
-The `requirements.txt` file is also provided, however installing the libraries directly can potentially help avoid OS or version based issues on different systems.
+The `requirements.txt` file is also provided, however installing the libraries directly can potentially help avoid OS or version based issues when setting up the libraries on a new machine.
 
 
 ## Repository Structure 

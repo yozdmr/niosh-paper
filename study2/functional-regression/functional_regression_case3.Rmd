@@ -1,0 +1,1241 @@
+---
+title: "functional_regression_case3"
+author:
+- name: "Setareh Kazemi Kheiri ^[Email: skazemik@buffalo.edu]"
+  affiliation: Department of Industrial and Systems Engineering, University at Buffalo
+  
+- name: "Hongyue Sun ^[Email: hongyuesun@uga.edu | Phone: +1-716-645-4715 | Website: <a href=\"https://www.stat.uga.edu/events/content/2023/hongyue-sun\">University  of Georgia Official</a> ]"
+  affiliation: College of Engineering, University of Georgia
+    
+- name: "Fadel Megahed ^[Email: megahefm@miamioh.edu | Phone: +1-513-529-4185 | Website: <a href=\"https://miamioh.edu/fsb/directory/?up=/directory/megahefm\">Miami University Official</a> ]"
+  affiliation: Farmer School of Business, Miami University
+    
+- name: "Lora Cavuoto ^[Email: loracavu@buffalo.edu | Phone: +1-716-645-4696 | Website: <a href=\"http://engineering.buffalo.edu/industrial-systems/people/faculty-directory/cavuoto-lora.html\">University at Buffalo Official</a> ]"
+  affiliation: Department of Industrial and Systems Engineering, University at Buffalo
+
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+bibliography: refs.bib
+link-citations: true
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{chngpage}
+  - \usepackage{caption}
+  - \usepackage{chngpage}
+  - \usepackage{color}
+  - \usepackage[autostyle=true,english=american]{csquotes}
+  - \usepackage{csvsimple}
+  - \usepackage{framed}
+  - \usepackage{graphicx}
+  - \usepackage{hyperref}
+  - \usepackage{lineno}
+  - \usepackage{lscape}
+  - \usepackage{mathptmx}
+  - \usepackage{mathrsfs}
+  - \usepackage{makecell}
+  - \usepackage{mathtools}
+  - \usepackage{media9}
+  - \usepackage{multicol}
+  - \usepackage{multirow}
+  - \usepackage{secdot}
+  - \usepackage{sectsty}
+  - \usepackage{setspace}
+  - \usepackage{subcaption}
+  - \usepackage{tabulary}
+  - \usepackage{titlesec}
+  - \usepackage[colorinlistoftodos]{todonotes}
+  - \usepackage{url}
+
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    df_print: paged
+    code_folding: show
+---
+
+# R Setup and Required Packages
+
+In this project, the open-source `r fontawesome::fa(name = "r-project", fill = "steelblue")` programming language is used for our analysis. `r fontawesome::fa(name = "r-project", fill = "steelblue")` is maintained by an international team of developers who make the language available at [The Comprehensive R Archive Network](https://cran.r-project.org/). Readers interested in reusing our code and reproducing our results should have `r fontawesome::fa(name = "r-project", fill = "steelblue")` installed locally on their machines. `r fontawesome::fa(name = "r-project", fill = "steelblue")` can be installed on a number of different operating systems (see [Windows](https://cran.r-project.org/bin/windows/), [Mac](https://cran.r-project.org/bin/macosx/), and [Linux](https://cran.r-project.org/bin/linux/) for the installation instructions for these systems). We also recommend using the RStudio interface for `r fontawesome::fa(name = "r-project", fill = "steelblue")`. The reader can [download RStudio](http://www.rstudio.com/ide) for free by following the instructions at the link. For non-R users, we recommend the [Hands-on Programming with R](https://rstudio-education.github.io/hopr/packages.html) for a brief overview of the software's functionality. Hereafter, we assume that the reader has an introductory understanding of the `r fontawesome::fa(name = "r-project", fill = "steelblue")` programming language.
+
+```{r setup, include=FALSE}
+#| label: setup
+
+#| warning: false
+
+#| message: false
+
+
+
+# Setting the random seed and chunk dependencies
+
+knitr::opts_chunk$set(cache.extra = set.seed(2022),
+
+                      autodep = TRUE) 
+
+
+
+# Load required packages
+
+if(require(pacman)==F) install.packages('pacman')
+
+pacman::p_load(tidyverse, stringr, magrittr, purrr, imputeTS, timetk, refund, forecast, zoo, kableExtra, DT, stargazer, readxl, gridExtra, signal, pander)
+
+
+
+# Graphic setup
+
+theme_set(theme_bw() +
+
+          theme(legend.position = 'top',
+
+                axis.title = element_text(size=8)))
+
+scale_colour_discrete = scale_color_brewer(palette = "Dark2")
+```
+
+# Load Data
+
+**IMPORTANT!!!** The data for Case Study 2 (WSD4FEDSRM) can be found at [this website](https://zenodo.org/records/8415066).
+
+```{r load, cache=TRUE}
+
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+# Load RPE
+rpe <- read.csv("./WSD4FEDSRM/Borg data/borg_data.csv", header = TRUE)
+
+rpe_ir <- rpe %>% 
+  # Remove columns between "X90_sec" and "end_of_trial"
+  select(-c(X100_sec:X250_sec)) %>%
+  # Remove rows where any of the columns have NA
+  drop_na() %>%
+  # Remove rows where the "task_order" column contains "e" (for external rotation tasks because only one row remains)
+  dplyr::filter(!str_detect(task_order, "e")) %>%
+  rename_with(~ as.character(seq(0,90,by=10)), .cols = 3:12)
+
+rpe_ir_long <- rpe_ir %>% 
+  select(-"end_of_trial") %>%
+  pivot_longer(3:12, names_to = "time" , values_to = "rpe" )
+
+rpe_ir_long$time <- as.numeric(rpe_ir_long$time)
+
+rpe_ir_long <- rpe_ir_long %>%
+  mutate(time_perc = round(time*(10/9),2), .after = time)
+
+rpe_ir_long$time_perc[rpe_ir_long$time_perc == 0] <- 0.01
+
+rpe_ir_long$time[rpe_ir_long$time == 0] <- 0.01
+
+rpe_ir_long$task_order[str_detect(rpe_ir_long$task_order, "35i")] <- "30-40_ir"
+rpe_ir_long$task_order[str_detect(rpe_ir_long$task_order, "45i")] <- "40-50_ir"
+rpe_ir_long$task_order[str_detect(rpe_ir_long$task_order, "55i")] <- "50-60_ir"
+
+rpe_ir_long$subject <- sub("_"," ", sub("subject","Subject",rpe_ir_long$subject))
+
+colnames(rpe_ir_long)[2] <- "task"
+
+# Unique Subject IDs
+
+subject_id <- unique(rpe_ir$subject)
+
+# Load Demographic and Anthropometric Data
+
+personal_data <- read.csv("./WSD4FEDSRM/Demographic and antropometric data/demographic&anthro.csv", header = TRUE)
+
+personal_data = personal_data %>%
+  select("subject", "age", "sex", "dominant_hand", "BMI.kg.m2.") %>%
+  rename_with( ~ "BMI" , .cols = 5) %>%
+  dplyr::filter(subject %in% subject_id) %>%
+  mutate(sex = case_when(
+    sex == "female" ~ 0,
+    sex == "male" ~ 1
+  ))
+
+# Load Signal Data
+
+main_directory <- getwd()
+
+subject_files <- str_replace_all(subject_id, "_", " ") %>%
+  str_to_title()
+subject_files <- str_replace_all(subject_files, "subject_", "Subject ")
+
+task_type <- c("30-40", "40-50", "50-60")
+
+output_list_IMU <- list()
+
+## Butterworth Filter
+
+n <- 4 # Filter order
+fc <- 0.2 # Cutoff frequency (Hz)
+Fs <- 100 # Sampling frequency (Hz)
+Wn <- (2/Fs) * fc # Normalized cutoff frequency
+
+butter_filter <- butter(n=n, W=Wn, type="low")
+
+locations <- c("forearm", "upper_arm", "shoulder", "hand", "sternum")
+
+for (subject in subject_files) {
+  
+  subject_data <- list()
+  
+  for (task in 1:3) {
+    
+    # Loop through each sensor location (Forearm, Upper arm, Shoulder)
+    for (location in c("Forearm", "Upper arm", "Shoulder", "Hand", "Sternum")) {
+      
+      location2 <- if_else(location == "Upper arm", "upper_arm", tolower(location))
+      
+      # Generate file paths for accelerometer and gyroscope data
+      acc_file <- file.path(main_directory, 
+                            "WSD4FEDSRM/EMG, IMU, and PPG data", 
+                            paste0(task_type[task], "_ internal rotation"), 
+                            subject, 
+                            "IMU data", 
+                            location, 
+                            paste0("acc_", location2, ".csv"))
+      
+      gyr_file <- file.path(main_directory, 
+                            "WSD4FEDSRM/EMG, IMU, and PPG data", 
+                            paste0(task_type[task], "_ internal rotation"), 
+                            subject, 
+                            "IMU data", 
+                            location, 
+                            paste0("gyr_", location2, ".csv"))
+      
+      # Check if the files exist before reading them
+      if (file.exists(acc_file) & file.exists(gyr_file)) {
+        
+        # Read accelerometer and gyroscope data
+        acc_data <- read_csv(acc_file, show_col_types = FALSE)
+        gyr_data <- read_csv(gyr_file, show_col_types = FALSE)
+        
+        colnames(acc_data) <- substr(colnames(acc_data),1,5)
+        colnames(gyr_data) <- substr(colnames(gyr_data),1,5)
+        
+        # Generate a time column based on the row number and the sampling rate (100 Hz)
+        acc_data <- acc_data %>% mutate(time = row_number() / 100, .before = acc_x)  
+        gyr_data <- gyr_data %>% mutate(time = row_number() / 100, .before = gyr_x) 
+        
+        # Apply the filter to acc_data and gyr_data columns
+        acc_data_filtered <- acc_data %>%
+          mutate(
+            acc_x_flt = filtfilt(butter_filter, acc_x),
+            acc_y_flt = filtfilt(butter_filter, acc_y),
+            acc_z_flt = filtfilt(butter_filter, acc_z)
+          )
+        
+        gyr_data_filtered <- gyr_data %>%
+          mutate(
+            gyr_x_flt = filtfilt(butter_filter, gyr_x),
+            gyr_y_flt = filtfilt(butter_filter, gyr_y),
+            gyr_z_flt = filtfilt(butter_filter, gyr_z)
+          )
+        
+        # Combine accelerometer and gyroscope data by time (for simplicity, assuming equal lengths)
+        combined_data <- full_join(acc_data_filtered, gyr_data_filtered, by = "time") %>%
+          dplyr::filter(time <= 90) 
+        
+        # Add columns for subject, location, and task
+        combined_data <- combined_data %>%
+          mutate(subject = subject,
+                 location = location2,
+                 task = paste0(task_type[task], "_ir"), .before = time) %>%
+          mutate(time_perc = round(time*(10/9),2), .after = time)
+        
+        if( max(combined_data$time_perc) == 100 ) {
+        # Append the combined data to the subject's task data list if the subject has finished till the end of the 90th second
+        subject_data[[paste0(task_type[task], "_ir", "_", location2)]] <- combined_data
+        }
+        
+      }
+    }
+  }
+  
+  # Combine all task data into a single dataframe for the subject
+  output_df_IMU <- bind_rows(subject_data)
+  
+  # Store the output dataframe in the output list with the subject name as the key
+  output_list_IMU[[subject]] <- output_df_IMU
+}
+
+rm(acc_data, gyr_data, acc_data_filtered, gyr_data_filtered, combined_data, output_df_IMU)
+
+```
+
+# RPE Plots
+
+```{r rpe_plots, cache=TRUE}
+
+rpe_plot = list()
+
+p = 1
+
+for (i in 1:length(subject_id)){
+  for (j in 1:length(task_type)){
+    for (k in 1:length(locations)) {
+  
+    df_main <- output_list_IMU[[i]] %>%
+      dplyr::filter(task == paste0(task_type[j],"_ir")) %>%
+      dplyr::filter(location == locations[k])
+    
+    if(dim(df_main)[1]>0){
+    
+    df_main <- left_join(df_main, rpe_ir_long[,c(1,2,5,6)], by = c("subject","task", "time_perc"))
+    
+    colnames(df_main)[18] <- "rpe_r"
+    
+    df_main = df_main %>%
+      pivot_longer(6:18, names_to = "sensor", values_to = "value") %>%
+      mutate( sensor_type = substr(sensor, 1,3),
+              sensor_dir = substr(sensor,5,5),
+              sensor_filt = substr(sensor,7,9), .after = sensor)
+    
+    df_main$sensor_filt[df_main$sensor_filt!="flt"] <- "nft"
+    
+    df_main$sensor_dir[df_main$sensor_type =="rpe"] <- "r"
+      
+   rpe_plot[[p]] <-  ggplot(df_main, aes(x = time_perc, y = value, group = sensor, color = sensor_dir)) +
+     geom_point(na.rm = TRUE) +
+     geom_line(na.rm = TRUE) +
+     facet_wrap(~ interaction(sensor_type, sensor_filt), scales = "free_y") +
+     labs(title = paste0("Signals Amplitude and RPE over Time for Subject ", i, ", Task Type ", task_type[j], ", on Location ", locations[k]),
+          x = "Time", 
+          y = "Value")
+       
+       print(rpe_plot[[p]])
+      
+       p <- p+1
+       
+       }
+    }
+  }
+}
+
+
+```
+
+# Extracting median features from 60 second windows
+
+```{r features_xtr_md, warning=FALSE, cache=TRUE}
+
+# The timepoints of rpes and filtered sensor signals are matched and then samples from 0.5 second before and after that time point is taken (101 samples) and the median of those 101 numbers are calculated as the feature.
+
+rpe_ir_long <- rpe_ir_long %>%
+  mutate(sub_tsk = paste0(subject,"_",task), .after = task)
+
+sub_tasks <- unique(rpe_ir_long$sub_tsk)
+
+rpe_times <- unique(rpe_ir_long$time)
+rpe_time_perc <- unique(rpe_ir_long$time_perc)
+
+output_list_filtered <- lapply(output_list_IMU, function(df) {
+  
+  final_filtered_df <- data.frame()
+  
+  unique_combinations <- df %>%
+    select(location, task) %>%
+    distinct()
+  
+  for (i in 1:nrow(unique_combinations)) {
+    loc <- unique_combinations$location[i]
+    tsk <- unique_combinations$task[i]
+    
+    sub_df <- df %>%
+      dplyr::filter(location == loc & task == tsk)
+    
+    sub_df <- sub_df %>%
+    mutate(sub_tsk = paste0(subject, "_", task), .after = task)
+  
+    sub_df <- sub_df %>%
+      dplyr::filter(sub_tsk %in% sub_tasks)
+  
+    if(dim(sub_df)[1] > 0) {
+      
+    filtered_df <- data.frame()
+    
+    if (nrow(sub_df) >= 101) {
+      first_rows <- sub_df[1:101, ]
+      filtered_df <- bind_rows(filtered_df, first_rows)
+    } else {
+      filtered_df <- bind_rows(filtered_df, sub_df)
+    }
+    
+    for (rpe_time in rpe_times[2:9]) {
+      
+      matching_index <- which(sub_df$time == rpe_time)
+      
+      if (length(matching_index) > 0) {
+        start_index <- (matching_index - 50)
+        end_index <- min(nrow(sub_df), matching_index + 50)  # Ensure we don't go beyond the last row
+        
+        subset_df <- sub_df[start_index:end_index, ]
+        
+        filtered_df <- bind_rows(filtered_df, subset_df)
+      }
+    }
+    
+     if (nrow(sub_df) >= 101) {
+      last_rows <- sub_df[(nrow(sub_df)-100):nrow(sub_df), ]
+      filtered_df <- bind_rows(filtered_df, last_rows)
+    } else {
+      filtered_df <- bind_rows(filtered_df, sub_df)
+    }
+    
+    filtered_df <- distinct(filtered_df)
+    
+    final_filtered_df <- bind_rows(final_filtered_df, filtered_df)
+    }
+  }
+  
+  return(final_filtered_df)
+})
+
+
+output_list_median <- lapply(output_list_filtered, function(df) {
+  
+  df <- df %>%
+    mutate(group = ceiling(row_number() / 101))
+  
+  median_df <- df %>%
+    group_by(group) %>%
+    summarise(across(everything(), ~ median(.x, na.rm = TRUE))) %>%
+    ungroup()
+  
+  median_df <- median_df %>% select(-group)
+  
+  nrows <- dim(median_df)[1]
+  length_rep <- nrows/10
+  median_df$time <- rep(rpe_times,length_rep)
+  median_df$time_perc <- rep(rpe_time_perc,length_rep)
+  
+  return(median_df)
+})
+
+df_median_all <- do.call(rbind,output_list_median)
+
+
+      
+```
+
+# Extracting FPC features from 60 second windows
+
+```{r features_xtr_fpc, warning=FALSE, cache=TRUE}
+
+# The timepoints of rpes and filtered sensor signals are matched and then samples from 0.5 second before and after that time point is taken (101 samples) and the fpc of those 101 numbers are calculated as the feature.
+
+# input : output_list_filtered, pve = 0.99
+
+function_fpc <- function(list, pve) {
+  
+  df <- do.call(rbind, list)
+  
+  df <- df[,-c(7:9,13:15)]
+  
+  colnames(df)[7:12] <- substr(colnames(df)[7:12],1,5)
+  
+  unique_loc <- unique(df$location)
+  
+  fpc_list = vector(mode = "list", length = length(unique_loc))
+  
+  names(fpc_list) <- unique_loc
+  
+  
+  for (j in 1:length(unique_loc)){
+    
+    fpc_scores_all <- matrix(unique_loc[j], nrow = 40, ncol = 1)
+    
+    for (i in 1:6) {
+      
+    sub_df <- df %>%
+      dplyr::filter(location==unique_loc[j]) %>%
+      dplyr::select(c(1:6 , (i+6)))
+  
+    fpc_df <- sub_df %>%
+      dplyr::select(c(4,5,7)) %>%
+      pivot_wider(values_from = colnames(sub_df)[7], names_from = time ) %>%
+      dplyr::select(-sub_tsk)
+    
+    fpc_df <- as.matrix(fpc_df)
+    
+    fpc_df <- refund::fpca.face(fpc_df, pve = pve)
+    
+    fpc_scores = as.matrix(fpc_df[["scores"]])
+    
+    rownames(fpc_scores) <- unique(sub_df$sub_tsk)
+    
+    colnames(fpc_scores) = paste0(colnames(sub_df)[7],'_','pc',c(1:dim(fpc_scores)[2]),'_', unique_loc[j])
+    
+    fpc_scores <- as.data.frame(fpc_scores)
+    
+    fpc_scores_all <- cbind(fpc_scores_all,fpc_scores)
+    
+    sub_tsks <- unique(sub_df$sub_tsk)
+    sub_string <- t(as.matrix(sapply(sub_tsks, function(x) strsplit(x, "_", fixed = TRUE)[[1]])))
+    
+    fpc_scores_all <- fpc_scores_all %>%
+      mutate(sub_tsk =  sub_tsks,
+             subject =  sub_string[,1],
+             task = paste0(sub_string[,2],"_", sub_string[,3])) %>%
+      select(sub_tsk, subject, task, everything())
+    
+    rownames(fpc_scores_all) <- c(1:dim(fpc_scores_all)[1])
+    
+    fpc_list[[j]] <- fpc_scores_all %>%
+      dplyr::select(-"fpc_scores_all")
+    
+    }
+  }
+  
+  # base_df <- fpc_list[[1]] %>% dplyr::select (1:3)
+  # 
+  # pcs_list <- lapply(fpc_list, function(df) dplyr::select(df, -1:-3))
+  # 
+  # pcs_combined <- dplyr::bind_cols(pcs_list)
+  # 
+  # df_fpc_final <- dplyr::bind_cols(base_df, pcs_combined)
+  
+  return(fpc_list)
+  
+}
+
+
+# Extracting the FPCs 
+
+fpc_list <- function_fpc(output_list_filtered, pve=0.99)
+      
+```
+
+# Preparing the inputs to the functional regression (FR)
+
+```{r FR_prep, cache=TRUE}
+
+personal_data$subject <- sub("_", " ", sub("subject", "Subject", personal_data$subject))
+
+df_combined <- df_median_all %>%
+  left_join(personal_data[,-4], by = "subject")
+
+df_combined <- df_combined %>%
+  relocate(age, sex, BMI, .after = subject)
+
+df_temp <- df_combined[,c(2,3,4,7)]
+
+df_temp <- distinct(df_temp) 
+
+input_data = vector(mode= "list")
+input_data[[1]] <- input_data$xgender <- factor(df_temp$sex, levels=c("1","0"))
+input_data[[2]] <- input_data$xage <- normalize_vec(df_temp$age, silent=T)
+input_data[[3]] <- input_data$xbmi <- normalize_vec(df_temp$BMI, silent=T)
+
+rpe_long <- rpe_ir_long[,c(3,5,7)]
+
+rpe_wide <- rpe_long %>% pivot_wider(names_from = time, values_from = rpe)
+rownames(rpe_wide) <- rpe_wide$sub_tsk
+
+input_data[[4]] <- input_data$Y <- rpe_wide[,-1]
+
+input_data[[4]] <- as.matrix(input_data[[4]])
+
+# Adding Signal Features (Median and FPC)
+
+#df_combined <- df_combined[,-c(13:15,19:21)]
+
+df_combined <- df_combined[,-c(10:12,16:18)]
+
+features <- colnames(df_combined)[10:15]
+
+for (location in unique(df_combined$location)) {
+  
+  location_data <- df_combined %>%
+    dplyr::filter(location == !!location)
+  
+  for (feature in features) {
+    
+    # Adding Median Features
+    
+    wide_df <- location_data %>%
+      select(sub_tsk, time, all_of(feature)) %>%
+      pivot_wider(names_from = time, values_from = all_of(feature))
+    
+    df_name <- paste0(substr(feature,1,5), "_", location)
+    
+    input_data[[df_name]] <- as.matrix(wide_df[,-1])
+    
+    # Adding FPC features
+    
+    fpc_name <- paste0(substr(feature,1,5), "_", location, "_", "pc")
+    
+    cols <- grep(substr(feature,1,5), colnames(fpc_list[[location]]))
+    
+    input_data[[fpc_name]] <- as.matrix(fpc_list[[location]][,cols])
+  }
+}
+
+
+sub_tsk_strs <- t(as.matrix(sapply(sub_tasks, function(x) strsplit(x, "_", fixed = TRUE)[[1]])))
+
+tasks <- paste0(sub_tsk_strs[,2],"_", sub_tsk_strs[,3])
+
+tasks[tasks == "30-40_ir"] <- "1"
+tasks[tasks == "40-50_ir"] <- "2"
+tasks[tasks == "50-60_ir"] <- "3"
+
+tasks <- factor(tasks)
+
+input_data[["task"]] <- tasks
+
+```
+
+# Fitting FR to full training data
+
+```{r FR, warning=FALSE, cache=TRUE}
+
+# model with scalar inputs
+
+model_tsk <- pffr(Y ~
+                 c(task),
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_tsk)
+
+
+model_ic <- pffr(Y ~
+                 c(xgender)+ 
+                 c(xage)+
+                 c(xbmi),
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_ic)
+
+model_tskic <- pffr(Y ~
+                 c(task)+
+                 c(xgender)+ 
+                 c(xage)+
+                 c(xbmi),
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_tskic)
+
+# model with functional inputs
+
+## Median
+
+model_med_shoulder <- pffr(Y ~
+                 c(xgender)+ 
+                 c(xage)+
+                 c(xbmi)+
+                 s(acc_x_shoulder) +  
+                 s(acc_y_shoulder) +  
+                 s(acc_z_shoulder) +  
+                 s(gyr_x_shoulder) +
+                 s(gyr_y_shoulder) +
+                 s(gyr_z_shoulder) ,
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_med_shoulder)
+
+model_med_upperarm <- pffr(Y ~
+                 c(xgender)+ 
+                 c(xage)+
+                 c(xbmi)+
+                 s(acc_x_upper_arm) +  
+                 s(acc_y_upper_arm) +  
+                 s(acc_z_upper_arm) +  
+                 s(gyr_x_upper_arm) +
+                 s(gyr_y_upper_arm) +
+                 s(gyr_z_upper_arm) ,
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_med_upperarm)
+
+model_med_forearm <- pffr(Y ~
+                 c(xgender)+ 
+                 c(xage)+
+                 c(xbmi)+
+                 s(acc_x_forearm) +  
+                 s(acc_y_forearm) +  
+                 s(acc_z_forearm) +  
+                 s(gyr_x_forearm) +
+                 s(gyr_y_forearm) +
+                 s(gyr_z_forearm) ,
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_med_forearm)
+
+model_med_hand <- pffr(Y ~
+                 c(xgender)+ 
+                 c(xage)+
+                 c(xbmi)+
+                 s(acc_x_hand) +  
+                 s(acc_y_hand) +  
+                 s(acc_z_hand) +  
+                 s(gyr_x_hand) +
+                 s(gyr_y_hand) +
+                 s(gyr_z_hand) ,
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_med_hand)
+
+model_med_sternum <- pffr(Y ~
+                 c(xgender)+ 
+                 c(xage)+
+                 c(xbmi)+
+                 s(acc_x_sternum) +  
+                 s(acc_y_sternum) +  
+                 s(acc_z_sternum) +  
+                 s(gyr_x_sternum) +
+                 s(gyr_y_sternum) +
+                 s(gyr_z_sternum) ,
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_med_sternum)
+
+# model_med_acc <- pffr(Y ~
+#                  c(xgender)+ 
+#                  c(xage)+
+#                  c(xbmi)+
+#                  s(acc_x_shoulder) +  
+#                  s(acc_y_shoulder) +  
+#                  s(acc_z_shoulder) +
+#                  s(acc_x_upper_arm) +  
+#                  s(acc_y_upper_arm) +  
+#                  s(acc_z_upper_arm) +
+#                  s(acc_x_forearm) +  
+#                  s(acc_y_forearm) +  
+#                  s(acc_z_forearm) +
+#                  s(acc_x_hand) +  
+#                  s(acc_y_hand) +  
+#                  s(acc_z_hand) +
+#                  s(acc_x_sternum) +  
+#                  s(acc_y_sternum) +  
+#                  s(acc_z_sternum),
+#                  data=input_data, 
+#                  method = "REML", 
+#                  algorithm = "gam", 
+#                  bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+# 
+# summary(model_med_acc)
+# 
+# model_med_gyr <- pffr(Y ~
+#                  c(xgender)+ 
+#                  c(xage)+
+#                  c(xbmi)+
+#                  s(gyr_x_shoulder) +  
+#                  s(gyr_y_shoulder) +  
+#                  s(gyr_z_shoulder) +
+#                  s(gyr_x_upper_arm) +  
+#                  s(gyr_y_upper_arm) +  
+#                  s(gyr_z_upper_arm) +
+#                  s(gyr_x_forearm) +  
+#                  s(gyr_y_forearm) +  
+#                  s(gyr_z_forearm) +
+#                  s(gyr_x_hand) +  
+#                  s(gyr_y_hand) +  
+#                  s(gyr_z_hand) +
+#                  s(gyr_x_sternum) +  
+#                  s(gyr_y_sternum) +  
+#                  s(gyr_z_sternum),
+#                  data=input_data, 
+#                  method = "REML", 
+#                  algorithm = "gam", 
+#                  bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+# 
+# summary(model_med_gyr)
+
+## FPC
+
+model_fpc_shoulder <- pffr(Y ~
+                 c(xgender)+ 
+                 c(xage)+
+                 c(xbmi)+
+                 ff(acc_x_shoulder_pc) +  
+                 #ff(acc_y_shoulder_pc) +  
+                 ff(acc_z_shoulder_pc) +  
+                 ff(gyr_x_shoulder_pc) +
+                 ff(gyr_y_shoulder_pc) +
+                 ff(gyr_z_shoulder_pc) ,
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_fpc_shoulder)
+
+model_fpc_upperarm <- pffr(Y ~
+                 c(xgender)+ 
+                 c(xage)+
+                 c(xbmi)+
+                 ff(acc_x_upper_arm_pc) +  
+                 ff(acc_y_upper_arm_pc) +  
+                 ff(acc_z_upper_arm_pc) +  
+                 ff(gyr_x_upper_arm_pc) +
+                 ff(gyr_y_upper_arm_pc) +
+                 ff(gyr_z_upper_arm_pc) ,
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_fpc_upperarm)
+
+model_fpc_forearm <- pffr(Y ~
+                 c(xgender)+ 
+                 c(xage)+
+                 c(xbmi)+
+                 ff(acc_x_forearm_pc) +  
+                 #ff(acc_y_forearm_pc) +  
+                 ff(acc_z_forearm_pc) +  
+                 ff(gyr_x_forearm_pc) +
+                 ff(gyr_y_forearm_pc) +
+                 ff(gyr_z_forearm_pc) ,
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_fpc_forearm)
+
+model_fpc_hand <- pffr(Y ~
+                 c(xgender)+ 
+                 c(xage)+
+                 c(xbmi)+
+                 ff(acc_x_hand_pc) +  
+                 #ff(acc_y_hand_pc) +  
+                 ff(acc_z_hand_pc) +  
+                 ff(gyr_x_hand_pc) +
+                 ff(gyr_y_hand_pc) +
+                 ff(gyr_z_hand_pc) ,
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_fpc_hand)
+
+model_fpc_sternum <- pffr(Y ~
+                 c(xgender)+ 
+                 c(xage)+
+                 c(xbmi)+
+                 ff(acc_x_sternum_pc) +  
+                 ff(acc_y_sternum_pc) +  
+                 ff(acc_z_sternum_pc) +  
+                 ff(gyr_x_sternum_pc) +
+                 ff(gyr_y_sternum_pc) +
+                 ff(gyr_z_sternum_pc) ,
+                 data=input_data, 
+                 method = "REML", 
+                 algorithm = "gam", 
+                 bs.int = list(bs = "ps", k = 10, m = c(2, 1)) )
+
+summary(model_fpc_sternum)
+
+```
+
+# Summary of FR results
+
+In the table below the R-squared adjusted of all above models are compared.
+
+```{r summarytable, cache=TRUE}
+
+models <- list(model_tsk, model_tskic, model_ic, model_med_shoulder, model_med_upperarm, model_med_forearm, model_med_hand, model_med_sternum, model_fpc_shoulder, model_fpc_upperarm, model_fpc_forearm, model_fpc_hand, model_fpc_sternum)
+
+
+#functions
+rsq_adj = function(x) {return(summary(x)$r.sq)}
+rsq = function(x) {return(summary(x)$dev)}
+aic = function(x) {return(x$aic)}
+
+summary_df <- data.frame(
+  Model = c('model_tsk', 'model_tskic', 'model_ic', 'model_med_shoulder', 'model_med_upperarm', 'model_med_forearm', 'model_med_hand', 'model_med_sternum', 'model_fpc_shoulder', 'model_fpc_upperarm', 'model_fpc_forearm', 'model_fpc_hand', 'model_fpc_sternum'), 
+  R_squared_adjusted = sapply(models, rsq_adj),
+  R_squared = sapply(models, rsq),
+  AIC = sapply(models, aic)
+) %>% dplyr::arrange(Model)
+
+
+# printing the summary of results
+
+DT::datatable(
+  data = summary_df, rownames = F, 
+  extensions = c('Buttons','FixedColumns'),
+  options = list(
+    dom = 'Bfrtip',
+    buttons = c('csv', 'excel', 'pdf', 'print'),
+    paging = TRUE, searching = TRUE, info = FALSE,
+    sort = TRUE, scrollX = TRUE, fixedColumns = list(leftColumns = 1)
+  )
+) %>% 
+  DT::formatRound(
+    columns = c('R_squared_adjusted','R_squared', 'AIC'), 
+    digits = 3)
+
+
+```
+
+# Checking Overfitting with leave-one-out cross validation
+
+```{r loo_cv, warning=FALSE, cache=TRUE}
+
+loo_cv <- function(input_data, predictor_names, model_name) {
+  n <- nrow(input_data[['Y']]) 
+  actual_responses <- input_data[['Y']]  
+  predicted_responses <- vector(mode="list",length = n)
+  error_log <- list()
+  
+  for (i in 1:n) {
+    
+    train_data <- lapply(input_data, function(x) {
+      if (is.matrix(x) || is.data.frame(x)) {
+        return(x[-i, , drop = FALSE]) 
+      } else {
+        return(x[-i]) 
+      }
+    })    
+    
+    #print(paste0("Testing for sample ", i))
+    
+    formula <- as.formula(paste("Y", "~", paste(predictor_names, collapse = "+")))
+    
+    tryCatch({model <- pffr(formula, data = train_data, method = "REML", algorithm = "gam", bs.int = list(bs = "ps", k = 10, m = c(2, 1)))
+    
+    test_data <- lapply(input_data, function(x) {
+      if (is.matrix(x) || is.data.frame(x)) {
+        return(x[i, , drop = FALSE])
+      } else {
+        return(x[i])
+      }
+    })
+    
+    prediction <- predict(model, test_data, reformat = T)
+    
+    predicted_responses[[i]] <- prediction
+    }
+    
+    , if(is.null(predicted_responses[[i]])){
+      predicted_responses[[i]] <- matrix(NA, nrow=1, ncol=10)
+    }
+    ,
+
+    error = function(e) {
+    error_log[[i]] <- list(error = e, iteration = i)
+    cat("Error in iteration", i, ": ", e$message, "\n")
+  }
+  )
+  }
+  
+   predicted_responses <- do.call(rbind, predicted_responses)
+   
+  
+  # Calculate metrics for accuracy
+   
+  valid_indices <- !is.na(predicted_responses)
+  
+  ae <- abs(actual_responses[valid_indices]  - predicted_responses[valid_indices] ) 
+  
+  mse <- mean((actual_responses[valid_indices] - predicted_responses[valid_indices])^2)
+  rmse <- sqrt(mse)
+  mae <- mean(abs(actual_responses[valid_indices]  - predicted_responses[valid_indices] ))
+  
+  mape <- mean(abs(actual_responses[valid_indices]  - predicted_responses[valid_indices] )/actual_responses[valid_indices] )
+    
+  # Plot the predictions
+
+  pred_long <- as.data.frame(predicted_responses) %>%
+    pivot_longer(cols = 1:10 , names_to = "time", values_to = "RPE") %>%
+    mutate("subject" = as.numeric(rep(1:40,each = 10)), .before = time ) %>%
+    mutate("time" = rep(seq(0,90,by=10),40), "label" = c("fitted"))
+
+  actual_long <- as.data.frame(actual_responses) %>%
+    pivot_longer(cols = 1:10 , names_to = "time", values_to = "RPE") %>%
+    mutate("subject" = as.numeric(rep(1:40,each = 10)), .before = time ) %>%
+    mutate("time" = rep(seq(0,90,by=10),40), "label" = c("actual"))
+
+  plot_df <- rbind(actual_long, pred_long)
+  plot_df$subject <- as.numeric(plot_df$subject)
+
+  plot <- ggplot2::ggplot(plot_df,aes(x = time, y = RPE, group = label, color = label))+
+    geom_line() +
+    facet_wrap(~ subject) +
+    theme_minimal() +
+    theme(panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank()) +
+    labs(title = paste("Actual vs. predicted RPE for model", model_name),
+         x = "Time",
+         y = "RPE")
+  
+  return(list(MSE = mse, RMSE = rmse, MAE = mae, MAPE = mape, plot = plot, plot_df = plot_df))
+}
+
+# loo CV on different models
+
+loo_model_tsk <- loo_cv(input_data, c("c(task)") , "model_tsk")
+
+loo_model_tskic <- loo_cv(input_data, c("c(task)","c(xgender)","c(xage)","c(xbmi)") , "model_tskic")
+
+loo_model_ic <- loo_cv(input_data, c("c(xgender)","c(xage)","c(xbmi)") , "model_ic")
+
+loo_model_shoulder <- loo_cv(input_data, c("c(xgender)","c(xage)","c(xbmi)", "s(acc_x_shoulder)" ,  "s(acc_y_shoulder)" ,  "s(acc_z_shoulder)" , "s(gyr_x_shoulder)" , "s(gyr_y_shoulder)" ,"s(gyr_z_shoulder)") , "model_median_shoulder")
+
+loo_model_upperarm <- loo_cv(input_data, c("c(xgender)","c(xage)","c(xbmi)", "s(acc_x_upper_arm)" ,  "s(acc_y_upper_arm)" ,  "s(acc_z_upper_arm)" , "s(gyr_x_upper_arm)" , "s(gyr_y_upper_arm)" ,"s(gyr_z_upper_arm)") , "model_median_upperarm")
+
+loo_model_forearm <- loo_cv(input_data, c("c(xgender)","c(xage)","c(xbmi)", "s(acc_x_forearm)" ,  "s(acc_y_forearm)" ,  "s(acc_z_forearm)" , "s(gyr_x_forearm)" , "s(gyr_y_forearm)" ,"s(gyr_z_forearm)") , "model_median_forearm")
+
+loo_model_hand <- loo_cv(input_data, c("c(xgender)","c(xage)","c(xbmi)", "s(acc_x_hand)" ,  "s(acc_y_hand)" ,  "s(acc_z_hand)" , "s(gyr_x_hand)" , "s(gyr_y_hand)" ,"s(gyr_z_hand)") , "model_median_hand")
+
+loo_model_sternum <- loo_cv(input_data, c("c(xgender)","c(xage)","c(xbmi)", "s(acc_x_sternum)" ,  "s(acc_y_sternum)" ,  "s(acc_z_sternum)" , "s(gyr_x_sternum)" , "s(gyr_y_sternum)" ,"s(gyr_z_sternum)") , "model_median_sternum")
+
+#
+loo_model_shoulder_pc <- loo_cv(input_data, c("c(xgender)","c(xage)","c(xbmi)", "ff(acc_x_shoulder_pc)" ,  "ff(acc_z_shoulder_pc)" , "ff(gyr_x_shoulder_pc)" , "ff(gyr_y_shoulder_pc)" ,"ff(gyr_z_shoulder_pc)") , "model_fpc_shoulder")
+
+loo_model_upperarm_pc <- loo_cv(input_data, c("c(xgender)","c(xage)","c(xbmi)", "ff(acc_x_upper_arm_pc)" ,  "ff(acc_y_upper_arm_pc)" ,  "ff(acc_z_upper_arm_pc)" , "ff(gyr_x_upper_arm_pc)" , "ff(gyr_y_upper_arm_pc)" ,"ff(gyr_z_upper_arm_pc)") , "model_fpc_upperarm")
+
+#
+loo_model_forearm_pc <- loo_cv(input_data, c("c(xgender)","c(xage)","c(xbmi)", "ff(acc_x_forearm_pc)" ,  "ff(acc_z_forearm_pc)" , "ff(gyr_x_forearm_pc)" , "ff(gyr_y_forearm_pc)" ,"ff(gyr_z_forearm_pc)") , "model_fpc_forearm")
+
+#
+loo_model_hand_pc <- loo_cv(input_data, c("c(xgender)","c(xage)","c(xbmi)", "ff(acc_x_hand_pc)" ,  "ff(acc_z_hand_pc)" , "ff(gyr_x_hand_pc)" , "ff(gyr_y_hand_pc)" ,"ff(gyr_z_hand_pc)") , "model_fpc_hand")
+
+loo_model_sternum_pc <- loo_cv(input_data, c("c(xgender)","c(xage)","c(xbmi)", "ff(acc_x_sternum_pc)" ,  "ff(acc_y_sternum_pc)" ,  "ff(acc_z_sternum_pc)" , "ff(gyr_x_sternum_pc)" , "ff(gyr_y_sternum_pc)" ,"ff(gyr_z_sternum_pc)") , "model_fpc_sternum")
+
+
+loo_models <- list(loo_model_tsk, loo_model_tskic,loo_model_ic, loo_model_shoulder, loo_model_upperarm, loo_model_forearm, loo_model_hand, loo_model_sternum, loo_model_shoulder_pc, loo_model_upperarm_pc, loo_model_forearm_pc, loo_model_hand_pc, loo_model_sternum_pc)
+
+min_rpe <- min(input_data[["Y"]])
+max_rpe <- max(input_data[["Y"]])
+
+for (i in 1: length(loo_models)){
+
+  df_temp <- loo_models[[i]][["plot_df"]]
+
+  df_temp<- df_temp %>% pivot_wider(values_from = "RPE", names_from = "label")
+
+  df_temp$fitted <- pmin(pmax(df_temp$fitted,min_rpe),max_rpe)
+
+  mse2 <- mean((df_temp$actual - df_temp$fitted)^2, na.rm = TRUE)
+  rmse2 <- sqrt(mse2)
+  mae2 <- mean(abs(df_temp$actual - df_temp$fitted), na.rm = TRUE)
+  mape2 <- mean(abs(df_temp$actual - df_temp$fitted)/df_temp$actual, na.rm = TRUE)
+  std_err <- sd(abs(df_temp$actual - df_temp$fitted), na.rm = TRUE)
+
+  loo_models[[i]][['MSE2']] <- mse2
+  loo_models[[i]][['RMSE2']] <- rmse2
+  loo_models[[i]][['MAE2']] <- mae2
+  loo_models[[i]][['MAPE2']] <- mape2
+  loo_models[[i]][['std_err']] <- std_err
+  loo_models[[i]][['df_pred_lim']] <- df_temp
+}
+
+names(loo_models) <- c('loo_model_tsk', 'loo_model_tskic', 'loo_model_ic', 'loo_model_shoulder', 'loo_model_upperarm', 'loo_model_forearm', 'loo_model_hand', 'loo_model_sternum', 'loo_model_shoulder_pc', 'loo_model_upperarm_pc', 'loo_model_forearm_pc', 'loo_model_hand_pc', 'loo_model_sternum_pc')
+
+```
+
+# Creating a baseline for comparison
+
+```{r baseline, cache=TRUE}
+
+# calculating the median for each time point as a baseline for forecasting the RPE
+
+median_rpe <- matrix(rep(apply(input_data[["Y"]],2,median),40),ncol =10, byrow=T)
+mean_rpe <- matrix(rep(apply(input_data[["Y"]],2,mean),40),ncol =10, byrow=T)
+actual_rpe <- input_data[["Y"]]
+
+mse_baseline_median <- mean((actual_rpe - median_rpe)^2, na.rm = TRUE)
+rmse_baseline_median <- sqrt(mse_baseline_median)
+mae_baseline_median <- mean(abs(actual_rpe - median_rpe), na.rm = TRUE)
+
+mse_baseline_mean <- mean((actual_rpe - mean_rpe)^2, na.rm = TRUE)
+rmse_baseline_mean <- sqrt(mse_baseline_mean)
+mae_baseline_mean <- mean(abs(actual_rpe - mean_rpe), na.rm = TRUE)
+
+n <- nrow(input_data[['Y']]) 
+predicted_responses_baseline_median <- vector(mode="list",length = n)
+
+for (i in 1:n) {
+  
+  train_data <- input_data[['Y']][-i,]
+  
+  prediction <-  apply(train_data,2,median)
+  
+  predicted_responses_baseline_median[[i]] <- prediction
+}
+
+ predicted_responses_baseline_median <- do.call(rbind, predicted_responses_baseline_median)
+
+# Calculate metrics for accuracy
+mse_baseline_median_loo <- mean((actual_rpe - predicted_responses_baseline_median)^2, na.rm = TRUE)
+rmse_baseline_median_loo <- sqrt(mse_baseline_median_loo)
+mae_baseline_median_loo <- mean(abs(actual_rpe - predicted_responses_baseline_median), na.rm = TRUE)
+mape_baseline_median_loo <- mean(abs(actual_rpe - predicted_responses_baseline_median)/actual_rpe, na.rm = TRUE)
+stde_baseline_median_loo <- sd(abs(actual_rpe - predicted_responses_baseline_median), na.rm = TRUE)
+
+predicted_responses_baseline_mean <- vector(mode="list",length = n)
+
+for (i in 1:n) {
+  
+  train_data <- input_data[['Y']][-i,]
+  
+  prediction <-  apply(train_data,2,mean)
+  
+  predicted_responses_baseline_mean[[i]] <- prediction
+}
+
+ predicted_responses_baseline_mean <- do.call(rbind, predicted_responses_baseline_mean)
+
+# Calculate metrics for accuracy
+abs_error_baseline_mean <- abs(actual_rpe - predicted_responses_baseline_mean)
+mse_baseline_mean_loo <- mean((actual_rpe - predicted_responses_baseline_mean)^2, na.rm = TRUE)
+rmse_baseline_mean_loo <- sqrt(mse_baseline_mean_loo)
+mae_baseline_mean_loo <- mean(abs(actual_rpe - predicted_responses_baseline_mean), na.rm = TRUE)
+mape_baseline_mean_loo <- mean(abs(actual_rpe - predicted_responses_baseline_mean)/actual_rpe, na.rm = TRUE)
+stde_baseline_mean_loo <- sd(abs(actual_rpe - predicted_responses_baseline_mean), na.rm = TRUE)
+
+# Plot the predictions
+
+
+pred_long_mean <- as.data.frame(predicted_responses_baseline_mean) %>%
+  pivot_longer(cols = 1:10 , names_to = "time", values_to = "RPE") %>%
+  mutate("subject" = rep(sub_tasks,each=10), .before = time ) %>%
+  mutate("time" = rep(seq(0,90,by=10),40), "label" = c("fitted_mean"))
+
+pred_long_median <- as.data.frame(predicted_responses_baseline_median) %>%
+  pivot_longer(cols = 1:10 , names_to = "time", values_to = "RPE") %>%
+  mutate("subject" = rep(sub_tasks,each=10), .before = time ) %>%
+  mutate("time" = rep(seq(0,90,by=10),40), "label" = c("fitted_median"))
+
+actual_long_rpe <- as.data.frame(actual_rpe) %>%
+  pivot_longer(cols = 1:10 , names_to = "time", values_to = "RPE") %>%
+  mutate("subject" = rep(sub_tasks,each=10), .before = time ) %>%
+  mutate("time" = rep(seq(0,90,by=10),40), "label" = c("actual"))
+
+plot_df_baseline <- rbind(actual_long_rpe, pred_long_mean, pred_long_median)
+
+plot_baseline <- ggplot2::ggplot(plot_df_baseline,aes(x = time, y = RPE, group = label, color = label))+
+  geom_line() +
+  facet_wrap(~ subject) +
+  theme_minimal() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  labs(title = "Actual vs. Mean and Median RPE",
+       x = "Time",
+       y = "RPE")
+
+print(plot_baseline)
+
+# For the Paper
+
+# for (i in 1: length(unique(plot_df_baseline$subject))){
+#
+#   df_temp <- plot_df_baseline[plot_df_baseline$subject==unique(plot_df_baseline$subject)[i],]
+#
+#   plot_baseline_temp <- ggplot2::ggplot(df_temp, aes(x = time, y = RPE, group = label, linetype = label, color = label)) +
+#   geom_line() +
+#   #theme_minimal() +
+#   theme_bw()+
+#   theme(panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank()) +
+#   labs(title = paste0(unique(plot_df_baseline$subject)[i] ," Actual vs. Mean and Median RPE"),
+#        x = "Time",
+#        y = "RPE") +
+#   scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
+#   scale_color_manual(values = c("grey40", "grey70", "black"))
+#
+#     ggsave(filename = paste0("Case2_plot_", i, ".png"), plot = plot_baseline_temp, width = 7, height = 4)
+#
+#   cat("Saved plot", i, "\n")
+# }
+# 
+# 
+# 
+# plot_baseline2 <- ggplot2::ggplot(plot_df_baseline, aes(x = time, y = RPE, group = label, linetype = label, color = label)) +
+#   geom_line() +
+#   facet_wrap(~ subject) +
+#   theme_minimal() +
+#   theme(panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank()) +
+#   labs(title = "Actual vs. Mean and Median RPE for the Second Case Study",
+#        subtitle = "The names of the subplots follow this format: participant number_task type, where task type refers to the three levels of maximum voluntary isometric contraction (MVIC) for the Internal Rotation Task."
+# ,       x = "Time",
+#        y = "RPE") +
+#   scale_linetype_manual(values = c("solid", "dashed", "dotted")) + 
+#   scale_color_manual(values = c("grey40", "grey70", "black"))
+
+
+
+```
+
+# Summary of LOO CV
+
+```{r summary_loo, cache=TRUE}
+
+
+#functions
+mse_xtr = function(x) {return(x$MSE2)}
+rmse_xtr = function(x) {return(x$RMSE2)}
+mae_xtr = function(x) {return(x$MAE2)}
+mape_xtr = function(x) {return(x$MAPE2)}
+stde_xtr = function(x) {return(x$std_err)}
+
+summary_df_loo <- data.frame(
+  Model = c('loo_model_tsk', 'loo_model_tskic', 'loo_model_ic', 'loo_model_shoulder', 'loo_model_upperarm', 'loo_model_forearm', 'loo_model_hand', 'loo_model_sternum', 'loo_model_shoulder_pc', 'loo_model_upperarm_pc', 'loo_model_forearm_pc', 'loo_model_hand_pc', 'loo_model_sternum_pc'), 
+  MSE = do.call(rbind,lapply(loo_models, mse_xtr)),
+  RMSE = do.call(rbind,lapply(loo_models, rmse_xtr)),
+  MAE = do.call(rbind,lapply(loo_models, mae_xtr)),
+  MAPE = do.call(rbind,lapply(loo_models, mape_xtr)),
+  STDE = do.call(rbind, lapply(loo_models, stde_xtr))
+  
+) %>% dplyr::arrange(Model)
+
+summary_df_loo[14,] <- c("benchmark_mean",mse_baseline_mean_loo, rmse_baseline_mean_loo, mae_baseline_mean_loo, mape_baseline_mean_loo, stde_baseline_mean_loo)
+summary_df_loo[15,] <- c("benchmark_median",mse_baseline_median_loo, rmse_baseline_median_loo, mae_baseline_median_loo, mape_baseline_median_loo, stde_baseline_median_loo)
+
+# printing the summary of results
+
+DT::datatable(
+  data = summary_df_loo, rownames = F, 
+  extensions = c('Buttons','FixedColumns'),
+  options = list(
+    dom = 'Bfrtip',
+    buttons = c('csv', 'excel', 'pdf', 'print'),
+    paging = TRUE, searching = TRUE, info = FALSE,
+    sort = TRUE, scrollX = TRUE, fixedColumns = list(leftColumns = 1)
+  )
+) %>% 
+  DT::formatRound(
+    columns = c('MSE','RMSE', 'MAE', 'MAPE', 'STDE'), 
+    digits = 3)
+
+```
+
+# Appendix
+
+```{r appendix}
+
+pander(sessionInfo(), compact = TRUE) # printing the session info
+
+```
+
+

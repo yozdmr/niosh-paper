@@ -1,0 +1,451 @@
+Feature,Value,Model,Subject
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_1
+error,0,DecisionTreeRegressor(random_state=2024),subject_1
+error,0,GradientBoostingRegressor(random_state=2024),subject_1
+error,0,DummyRegressor(),subject_1
+error,0,LGBMRegressor(random_state=2024),subject_1
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_1
+error,0,BayesianRidge(),subject_1
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_1
+error,0,AdaBoostRegressor(random_state=2024),subject_1
+error,0,OrthogonalMatchingPursuit(),subject_1
+error,0,ElasticNet(random_state=2024),subject_1
+error,0,Lasso(random_state=2024),subject_1
+error,0,LassoLars(random_state=2024),subject_1
+error,0,KNeighborsRegressor(n_jobs=-1),subject_1
+error,0,Ridge(random_state=2024),subject_1
+error,0,HuberRegressor(),subject_1
+error,0,LinearRegression(n_jobs=-1),subject_1
+error,0,Lars(random_state=2024),subject_1
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_10
+error,0,AdaBoostRegressor(random_state=2024),subject_10
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_10
+error,0,GradientBoostingRegressor(random_state=2024),subject_10
+error,0,DecisionTreeRegressor(random_state=2024),subject_10
+error,0,LGBMRegressor(random_state=2024),subject_10
+error,0,Ridge(random_state=2024),subject_10
+error,0,Lars(random_state=2024),subject_10
+error,0,LinearRegression(n_jobs=-1),subject_10
+error,0,OrthogonalMatchingPursuit(),subject_10
+error,0,DummyRegressor(),subject_10
+error,0,BayesianRidge(),subject_10
+error,0,Lasso(random_state=2024),subject_10
+error,0,LassoLars(random_state=2024),subject_10
+error,0,ElasticNet(random_state=2024),subject_10
+error,0,KNeighborsRegressor(n_jobs=-1),subject_10
+error,0,HuberRegressor(),subject_10
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_10
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_12
+error,0,DummyRegressor(),subject_12
+error,0,LGBMRegressor(random_state=2024),subject_12
+error,0,BayesianRidge(),subject_12
+error,0,Lasso(random_state=2024),subject_12
+error,0,LassoLars(random_state=2024),subject_12
+error,0,ElasticNet(random_state=2024),subject_12
+error,0,KNeighborsRegressor(n_jobs=-1),subject_12
+error,0,OrthogonalMatchingPursuit(),subject_12
+error,0,DecisionTreeRegressor(random_state=2024),subject_12
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_12
+error,0,GradientBoostingRegressor(random_state=2024),subject_12
+error,0,Ridge(random_state=2024),subject_12
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_12
+error,0,AdaBoostRegressor(random_state=2024),subject_12
+error,0,HuberRegressor(),subject_12
+error,0,LinearRegression(n_jobs=-1),subject_12
+error,0,Lars(random_state=2024),subject_12
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_15
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_15
+error,0,KNeighborsRegressor(n_jobs=-1),subject_15
+error,0,GradientBoostingRegressor(random_state=2024),subject_15
+error,0,DummyRegressor(),subject_15
+error,0,BayesianRidge(),subject_15
+error,0,LGBMRegressor(random_state=2024),subject_15
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_15
+error,0,Lasso(random_state=2024),subject_15
+error,0,LassoLars(random_state=2024),subject_15
+error,0,OrthogonalMatchingPursuit(),subject_15
+error,0,ElasticNet(random_state=2024),subject_15
+error,0,AdaBoostRegressor(random_state=2024),subject_15
+error,0,Ridge(random_state=2024),subject_15
+error,0,HuberRegressor(),subject_15
+error,0,LinearRegression(n_jobs=-1),subject_15
+error,0,DecisionTreeRegressor(random_state=2024),subject_15
+error,0,Lars(random_state=2024),subject_15
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_16
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_16
+error,0,AdaBoostRegressor(random_state=2024),subject_16
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_16
+error,0,DummyRegressor(),subject_16
+error,0,LGBMRegressor(random_state=2024),subject_16
+error,0,BayesianRidge(),subject_16
+error,0,DecisionTreeRegressor(random_state=2024),subject_16
+error,0,Lasso(random_state=2024),subject_16
+error,0,LassoLars(random_state=2024),subject_16
+error,0,GradientBoostingRegressor(random_state=2024),subject_16
+error,0,OrthogonalMatchingPursuit(),subject_16
+error,0,ElasticNet(random_state=2024),subject_16
+error,0,KNeighborsRegressor(n_jobs=-1),subject_16
+error,0,Ridge(random_state=2024),subject_16
+error,0,HuberRegressor(),subject_16
+error,0,LinearRegression(n_jobs=-1),subject_16
+error,0,Lars(random_state=2024),subject_16
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_17
+error,0,LinearRegression(n_jobs=-1),subject_17
+error,0,GradientBoostingRegressor(random_state=2024),subject_17
+error,0,DummyRegressor(),subject_17
+error,0,LGBMRegressor(random_state=2024),subject_17
+error,0,BayesianRidge(),subject_17
+error,0,Lasso(random_state=2024),subject_17
+error,0,LassoLars(random_state=2024),subject_17
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_17
+error,0,ElasticNet(random_state=2024),subject_17
+error,0,OrthogonalMatchingPursuit(),subject_17
+error,0,KNeighborsRegressor(n_jobs=-1),subject_17
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_17
+error,0,Ridge(random_state=2024),subject_17
+error,0,AdaBoostRegressor(random_state=2024),subject_17
+error,0,HuberRegressor(),subject_17
+error,0,DecisionTreeRegressor(random_state=2024),subject_17
+error,0,Lars(random_state=2024),subject_17
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_18
+error,0,DummyRegressor(),subject_18
+error,0,LGBMRegressor(random_state=2024),subject_18
+error,0,BayesianRidge(),subject_18
+error,0,Lasso(random_state=2024),subject_18
+error,0,LassoLars(random_state=2024),subject_18
+error,0,ElasticNet(random_state=2024),subject_18
+error,0,OrthogonalMatchingPursuit(),subject_18
+error,0,KNeighborsRegressor(n_jobs=-1),subject_18
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_18
+error,0,DecisionTreeRegressor(random_state=2024),subject_18
+error,0,GradientBoostingRegressor(random_state=2024),subject_18
+error,0,Ridge(random_state=2024),subject_18
+error,0,AdaBoostRegressor(random_state=2024),subject_18
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_18
+error,0,HuberRegressor(),subject_18
+error,0,Lars(random_state=2024),subject_18
+error,0,LinearRegression(n_jobs=-1),subject_18
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_19
+error,0,AdaBoostRegressor(random_state=2024),subject_19
+error,0,LGBMRegressor(random_state=2024),subject_19
+error,0,GradientBoostingRegressor(random_state=2024),subject_19
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_19
+error,0,LinearRegression(n_jobs=-1),subject_19
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_19
+error,0,HuberRegressor(),subject_19
+error,0,Ridge(random_state=2024),subject_19
+error,0,DecisionTreeRegressor(random_state=2024),subject_19
+error,0,KNeighborsRegressor(n_jobs=-1),subject_19
+error,0,Lars(random_state=2024),subject_19
+error,0,DummyRegressor(),subject_19
+error,0,BayesianRidge(),subject_19
+error,0,Lasso(random_state=2024),subject_19
+error,0,LassoLars(random_state=2024),subject_19
+error,0,ElasticNet(random_state=2024),subject_19
+error,0,OrthogonalMatchingPursuit(),subject_19
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_2
+error,0,AdaBoostRegressor(random_state=2024),subject_2
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_2
+error,0,LinearRegression(n_jobs=-1),subject_2
+error,0,Ridge(random_state=2024),subject_2
+error,0,OrthogonalMatchingPursuit(),subject_2
+error,0,Lasso(random_state=2024),subject_2
+error,0,LassoLars(random_state=2024),subject_2
+error,0,GradientBoostingRegressor(random_state=2024),subject_2
+error,0,DummyRegressor(),subject_2
+error,0,BayesianRidge(),subject_2
+error,0,ElasticNet(random_state=2024),subject_2
+error,0,KNeighborsRegressor(n_jobs=-1),subject_2
+error,0,HuberRegressor(),subject_2
+error,0,LGBMRegressor(random_state=2024),subject_2
+error,0,DecisionTreeRegressor(random_state=2024),subject_2
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_2
+error,0,Lars(random_state=2024),subject_2
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_20
+error,0,DecisionTreeRegressor(random_state=2024),subject_20
+error,0,AdaBoostRegressor(random_state=2024),subject_20
+error,0,GradientBoostingRegressor(random_state=2024),subject_20
+error,0,Ridge(random_state=2024),subject_20
+error,0,HuberRegressor(),subject_20
+error,0,DummyRegressor(),subject_20
+error,0,LGBMRegressor(random_state=2024),subject_20
+error,0,BayesianRidge(),subject_20
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_20
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_20
+error,0,Lasso(random_state=2024),subject_20
+error,0,LassoLars(random_state=2024),subject_20
+error,0,ElasticNet(random_state=2024),subject_20
+error,0,OrthogonalMatchingPursuit(),subject_20
+error,0,LinearRegression(n_jobs=-1),subject_20
+error,0,KNeighborsRegressor(n_jobs=-1),subject_20
+error,0,Lars(random_state=2024),subject_20
+error,0,KNeighborsRegressor(n_jobs=-1),subject_21
+error,0,Ridge(random_state=2024),subject_21
+error,0,DecisionTreeRegressor(random_state=2024),subject_21
+error,0,LinearRegression(n_jobs=-1),subject_21
+error,0,LGBMRegressor(random_state=2024),subject_21
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_21
+error,0,DummyRegressor(),subject_21
+error,0,BayesianRidge(),subject_21
+error,0,Lasso(random_state=2024),subject_21
+error,0,LassoLars(random_state=2024),subject_21
+error,0,ElasticNet(random_state=2024),subject_21
+error,0,OrthogonalMatchingPursuit(),subject_21
+error,0,HuberRegressor(),subject_21
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_21
+error,0,AdaBoostRegressor(random_state=2024),subject_21
+error,0,GradientBoostingRegressor(random_state=2024),subject_21
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_21
+error,0,Lars(random_state=2024),subject_21
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_22
+error,0,GradientBoostingRegressor(random_state=2024),subject_22
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_22
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_22
+error,0,DummyRegressor(),subject_22
+error,0,LGBMRegressor(random_state=2024),subject_22
+error,0,BayesianRidge(),subject_22
+error,0,AdaBoostRegressor(random_state=2024),subject_22
+error,0,Lasso(random_state=2024),subject_22
+error,0,LassoLars(random_state=2024),subject_22
+error,0,ElasticNet(random_state=2024),subject_22
+error,0,OrthogonalMatchingPursuit(),subject_22
+error,0,KNeighborsRegressor(n_jobs=-1),subject_22
+error,0,DecisionTreeRegressor(random_state=2024),subject_22
+error,0,Ridge(random_state=2024),subject_22
+error,0,LinearRegression(n_jobs=-1),subject_22
+error,0,HuberRegressor(),subject_22
+error,0,Lars(random_state=2024),subject_22
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_24
+error,0,DecisionTreeRegressor(random_state=2024),subject_24
+error,0,GradientBoostingRegressor(random_state=2024),subject_24
+error,0,DummyRegressor(),subject_24
+error,0,LGBMRegressor(random_state=2024),subject_24
+error,0,BayesianRidge(),subject_24
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_24
+error,0,Lasso(random_state=2024),subject_24
+error,0,LassoLars(random_state=2024),subject_24
+error,0,OrthogonalMatchingPursuit(),subject_24
+error,0,KNeighborsRegressor(n_jobs=-1),subject_24
+error,0,ElasticNet(random_state=2024),subject_24
+error,0,AdaBoostRegressor(random_state=2024),subject_24
+error,0,Ridge(random_state=2024),subject_24
+error,0,LinearRegression(n_jobs=-1),subject_24
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_24
+error,0,HuberRegressor(),subject_24
+error,0,Lars(random_state=2024),subject_24
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_25
+error,0,GradientBoostingRegressor(random_state=2024),subject_25
+error,0,DummyRegressor(),subject_25
+error,0,LGBMRegressor(random_state=2024),subject_25
+error,0,BayesianRidge(),subject_25
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_25
+error,0,DecisionTreeRegressor(random_state=2024),subject_25
+error,0,KNeighborsRegressor(n_jobs=-1),subject_25
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_25
+error,0,LassoLars(random_state=2024),subject_25
+error,0,Lasso(random_state=2024),subject_25
+error,0,ElasticNet(random_state=2024),subject_25
+error,0,OrthogonalMatchingPursuit(),subject_25
+error,0,AdaBoostRegressor(random_state=2024),subject_25
+error,0,Ridge(random_state=2024),subject_25
+error,0,LinearRegression(n_jobs=-1),subject_25
+error,0,HuberRegressor(),subject_25
+error,0,Lars(random_state=2024),subject_25
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_26
+error,0,AdaBoostRegressor(random_state=2024),subject_26
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_26
+error,0,LGBMRegressor(random_state=2024),subject_26
+error,0,GradientBoostingRegressor(random_state=2024),subject_26
+error,0,KNeighborsRegressor(n_jobs=-1),subject_26
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_26
+error,0,Ridge(random_state=2024),subject_26
+error,0,BayesianRidge(),subject_26
+error,0,DummyRegressor(),subject_26
+error,0,ElasticNet(random_state=2024),subject_26
+error,0,Lasso(random_state=2024),subject_26
+error,0,LassoLars(random_state=2024),subject_26
+error,0,OrthogonalMatchingPursuit(),subject_26
+error,0,LinearRegression(n_jobs=-1),subject_26
+error,0,HuberRegressor(),subject_26
+error,0,DecisionTreeRegressor(random_state=2024),subject_26
+error,0,Lars(random_state=2024),subject_26
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_27
+error,0,AdaBoostRegressor(random_state=2024),subject_27
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_27
+error,0,GradientBoostingRegressor(random_state=2024),subject_27
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_27
+error,0,DecisionTreeRegressor(random_state=2024),subject_27
+error,0,DummyRegressor(),subject_27
+error,0,LGBMRegressor(random_state=2024),subject_27
+error,0,BayesianRidge(),subject_27
+error,0,LassoLars(random_state=2024),subject_27
+error,0,Lasso(random_state=2024),subject_27
+error,0,OrthogonalMatchingPursuit(),subject_27
+error,0,ElasticNet(random_state=2024),subject_27
+error,0,KNeighborsRegressor(n_jobs=-1),subject_27
+error,0,Ridge(random_state=2024),subject_27
+error,0,HuberRegressor(),subject_27
+error,0,LinearRegression(n_jobs=-1),subject_27
+error,0,Lars(random_state=2024),subject_27
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_28
+error,0,LGBMRegressor(random_state=2024),subject_28
+error,0,AdaBoostRegressor(random_state=2024),subject_28
+error,0,GradientBoostingRegressor(random_state=2024),subject_28
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_28
+error,0,DummyRegressor(),subject_28
+error,0,BayesianRidge(),subject_28
+error,0,Lasso(random_state=2024),subject_28
+error,0,LassoLars(random_state=2024),subject_28
+error,0,ElasticNet(random_state=2024),subject_28
+error,0,KNeighborsRegressor(n_jobs=-1),subject_28
+error,0,OrthogonalMatchingPursuit(),subject_28
+error,0,LinearRegression(n_jobs=-1),subject_28
+error,0,Ridge(random_state=2024),subject_28
+error,0,HuberRegressor(),subject_28
+error,0,DecisionTreeRegressor(random_state=2024),subject_28
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_28
+error,0,Lars(random_state=2024),subject_28
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_29
+error,0,DecisionTreeRegressor(random_state=2024),subject_29
+error,0,GradientBoostingRegressor(random_state=2024),subject_29
+error,0,AdaBoostRegressor(random_state=2024),subject_29
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_29
+error,0,DummyRegressor(),subject_29
+error,0,LGBMRegressor(random_state=2024),subject_29
+error,0,BayesianRidge(),subject_29
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_29
+error,0,LassoLars(random_state=2024),subject_29
+error,0,Lasso(random_state=2024),subject_29
+error,0,OrthogonalMatchingPursuit(),subject_29
+error,0,ElasticNet(random_state=2024),subject_29
+error,0,KNeighborsRegressor(n_jobs=-1),subject_29
+error,0,LinearRegression(n_jobs=-1),subject_29
+error,0,Ridge(random_state=2024),subject_29
+error,0,HuberRegressor(),subject_29
+error,0,Lars(random_state=2024),subject_29
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_3
+error,0,GradientBoostingRegressor(random_state=2024),subject_3
+error,0,AdaBoostRegressor(random_state=2024),subject_3
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_3
+error,0,LinearRegression(n_jobs=-1),subject_3
+error,0,Ridge(random_state=2024),subject_3
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_3
+error,0,HuberRegressor(),subject_3
+error,0,Lars(random_state=2024),subject_3
+error,0,KNeighborsRegressor(n_jobs=-1),subject_3
+error,0,LGBMRegressor(random_state=2024),subject_3
+error,0,ElasticNet(random_state=2024),subject_3
+error,0,DecisionTreeRegressor(random_state=2024),subject_3
+error,0,Lasso(random_state=2024),subject_3
+error,0,LassoLars(random_state=2024),subject_3
+error,0,OrthogonalMatchingPursuit(),subject_3
+error,0,BayesianRidge(),subject_3
+error,0,DummyRegressor(),subject_3
+error,0,GradientBoostingRegressor(random_state=2024),subject_33
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_33
+error,0,AdaBoostRegressor(random_state=2024),subject_33
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_33
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_33
+error,0,KNeighborsRegressor(n_jobs=-1),subject_33
+error,0,ElasticNet(random_state=2024),subject_33
+error,0,DummyRegressor(),subject_33
+error,0,BayesianRidge(),subject_33
+error,0,DecisionTreeRegressor(random_state=2024),subject_33
+error,0,Lasso(random_state=2024),subject_33
+error,0,LassoLars(random_state=2024),subject_33
+error,0,OrthogonalMatchingPursuit(),subject_33
+error,0,LinearRegression(n_jobs=-1),subject_33
+error,0,LGBMRegressor(random_state=2024),subject_33
+error,0,Ridge(random_state=2024),subject_33
+error,0,HuberRegressor(),subject_33
+error,0,Lars(random_state=2024),subject_33
+error,0,AdaBoostRegressor(random_state=2024),subject_5
+error,0,DecisionTreeRegressor(random_state=2024),subject_5
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_5
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_5
+error,0,GradientBoostingRegressor(random_state=2024),subject_5
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_5
+error,0,KNeighborsRegressor(n_jobs=-1),subject_5
+error,0,Ridge(random_state=2024),subject_5
+error,0,ElasticNet(random_state=2024),subject_5
+error,0,DummyRegressor(),subject_5
+error,0,BayesianRidge(),subject_5
+error,0,Lasso(random_state=2024),subject_5
+error,0,LassoLars(random_state=2024),subject_5
+error,0,OrthogonalMatchingPursuit(),subject_5
+error,0,LGBMRegressor(random_state=2024),subject_5
+error,0,LinearRegression(n_jobs=-1),subject_5
+error,0,HuberRegressor(),subject_5
+error,0,Lars(random_state=2024),subject_5
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_6
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_6
+error,0,AdaBoostRegressor(random_state=2024),subject_6
+error,0,KNeighborsRegressor(n_jobs=-1),subject_6
+error,0,GradientBoostingRegressor(random_state=2024),subject_6
+error,0,LGBMRegressor(random_state=2024),subject_6
+error,0,LinearRegression(n_jobs=-1),subject_6
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_6
+error,0,DummyRegressor(),subject_6
+error,0,BayesianRidge(),subject_6
+error,0,LassoLars(random_state=2024),subject_6
+error,0,Lasso(random_state=2024),subject_6
+error,0,ElasticNet(random_state=2024),subject_6
+error,0,OrthogonalMatchingPursuit(),subject_6
+error,0,Ridge(random_state=2024),subject_6
+error,0,HuberRegressor(),subject_6
+error,0,DecisionTreeRegressor(random_state=2024),subject_6
+error,0,Lars(random_state=2024),subject_6
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_7
+error,0,GradientBoostingRegressor(random_state=2024),subject_7
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_7
+error,0,DecisionTreeRegressor(random_state=2024),subject_7
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_7
+error,0,AdaBoostRegressor(random_state=2024),subject_7
+error,0,DummyRegressor(),subject_7
+error,0,LGBMRegressor(random_state=2024),subject_7
+error,0,BayesianRidge(),subject_7
+error,0,OrthogonalMatchingPursuit(),subject_7
+error,0,LassoLars(random_state=2024),subject_7
+error,0,Lasso(random_state=2024),subject_7
+error,0,ElasticNet(random_state=2024),subject_7
+error,0,KNeighborsRegressor(n_jobs=-1),subject_7
+error,0,Ridge(random_state=2024),subject_7
+error,0,HuberRegressor(),subject_7
+error,0,LinearRegression(n_jobs=-1),subject_7
+error,0,Lars(random_state=2024),subject_7
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_8
+error,0,GradientBoostingRegressor(random_state=2024),subject_8
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_8
+error,0,DecisionTreeRegressor(random_state=2024),subject_8
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_8
+error,0,DummyRegressor(),subject_8
+error,0,LGBMRegressor(random_state=2024),subject_8
+error,0,BayesianRidge(),subject_8
+error,0,ElasticNet(random_state=2024),subject_8
+error,0,LassoLars(random_state=2024),subject_8
+error,0,Lasso(random_state=2024),subject_8
+error,0,KNeighborsRegressor(n_jobs=-1),subject_8
+error,0,OrthogonalMatchingPursuit(),subject_8
+error,0,AdaBoostRegressor(random_state=2024),subject_8
+error,0,Ridge(random_state=2024),subject_8
+error,0,HuberRegressor(),subject_8
+error,0,LinearRegression(n_jobs=-1),subject_8
+error,0,Lars(random_state=2024),subject_8
+error,0,PassiveAggressiveRegressor(random_state=2024),subject_9
+error,0,DecisionTreeRegressor(random_state=2024),subject_9
+error,0,DummyRegressor(),subject_9
+error,0,LGBMRegressor(random_state=2024),subject_9
+error,0,BayesianRidge(),subject_9
+error,0,KNeighborsRegressor(n_jobs=-1),subject_9
+error,0,AdaBoostRegressor(random_state=2024),subject_9
+error,0,GradientBoostingRegressor(random_state=2024),subject_9
+error,0,Lasso(random_state=2024),subject_9
+error,0,LassoLars(random_state=2024),subject_9
+error,0,ElasticNet(random_state=2024),subject_9
+error,0,HuberRegressor(),subject_9
+error,0,Ridge(random_state=2024),subject_9
+error,0,"ExtraTreesRegressor(n_jobs=-1, random_state=2024)",subject_9
+error,0,OrthogonalMatchingPursuit(),subject_9
+error,0,"RandomForestRegressor(n_jobs=-1, random_state=2024)",subject_9
+error,0,LinearRegression(n_jobs=-1),subject_9
+error,0,Lars(random_state=2024),subject_9

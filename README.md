@@ -1,13 +1,26 @@
 # NIOSH Code (finalize this title)
 
 ## Overview
-This repository contains all of the code used to perform the analyses discussed in the [PAPER NAME](URL). Further details on how the repository is orgainzed is provided in the [repository structure](#repository-structure).
+This repository contains all of the data and code used to perform the analyses discussed in the [PAPER NAME](URL). Our overarching hypothesis is to evaluate the utility of wearable sensors in modeling upper-extremity fatigue. To test our hypothesis, we present the following two case studies:
+  - **Case 1: Dynamic Order-Picking Task** Short description.
+  - **Case 2: Shoulder Internal and External Rotation Movements** Short description.  
+
+For each of those two case studies, we examine the use of three modeling approaches:  
+  - **Linear and logistic regression:**
+  - Several widely used **machine learning models:**
+  - **Functional regression:**
+We utilized R and Python to run those models. Specifically, we used R to run the linear regression model as well the functional regression models. On the other hand, we used Python to run the machine learning models, evaluating the utility of those models in predicting continous fatigue outcomes (i.e., regression applications of machine learning models) and binary outcomes (i.e., the presence or absence of fatigue with classifcation machine learning-based models). We present the raw Python and RMarkdown notebooks in the folders below. Additionally, the knitted RMarkdown HTMLs and Jupyter notebooks are available at: [](), [](), ... . 
+
+Further details on how the repository is orgainzed is provided in the [repository structure](#repository-structure).
+
+## To do:
+ - It would be nice to add the Jupyter "buttons" to run your notebook on Colab and Deepnote. 
 
 ## Requirements
 
-### RStudio
+### R
 TODO needs:
- - RStudio version
+ - R version
  - Libraries used
 
 

@@ -2,20 +2,20 @@
 
 ## Overview
 This repository contains all of the data and code used to perform the analyses discussed in the [PAPER NAME](URL). Our overarching hypothesis is to evaluate the utility of wearable sensors in modeling upper-extremity fatigue. To test our hypothesis, we present the following two case studies:
-  - **Case 1: Dynamic Order-Picking Task** Short description.
-  - **Case 2: Shoulder Internal and External Rotation Movements** Short description.  
+  - **Case 1: Dynamic Order-Picking Task** TODO Short description.
+  - **Case 2: Shoulder Internal and External Rotation Movements** TODO Short description.  
 
 For each of those two case studies, we examine the use of three modeling approaches:  
-  - **Linear and logistic regression:**
-  - Several widely used **machine learning models:**
-  - **Functional regression:**
-We utilized R and Python to run those models. Specifically, we used R to run the linear regression model as well the functional regression models. On the other hand, we used Python to run the machine learning models, evaluating the utility of those models in predicting continous fatigue outcomes (i.e., regression applications of machine learning models) and binary outcomes (i.e., the presence or absence of fatigue with classifcation machine learning-based models). We present the raw Python and RMarkdown notebooks in the folders below. Additionally, the knitted RMarkdown HTMLs and Jupyter notebooks are available at: [](), [](), ... . 
+  - **Linear and logistic regression:** TODO
+  - Several widely used **machine learning models:** TODO
+  - **Functional regression:** TODO
+We utilized R and Python to run those models. Specifically, we used R to run the linear regression model as well the functional regression models. On the other hand, we used Python to run the machine learning models, evaluating the utility of those models in predicting continous fatigue outcomes (i.e., regression applications of machine learning models) and binary outcomes (i.e., the presence or absence of fatigue with classifcation machine learning-based models). We present the raw Python and RMarkdown notebooks in the folders below. Additionally, the knitted RMarkdown HTMLs and Jupyter notebooks are available at: [src](link), [src](link), ... . 
 
 Further details on how the repository is orgainzed is provided in the [repository structure](#repository-structure).
 
 ## To do:
  - [x] Restructure directories in study2
- - [ ] Update the repository structure section to show the new structure
+ - [x] Update the repository structure section to show the new structure
  - [ ] Get code for linear/logistic regression implementations
  - [ ] Write code to get figures for machine learning (study1 and study2)
  - [ ] It would be nice to [add the Jupyter "buttons"](https://openincolab.com/) to run notebooks on Colab or Deepnote. 
@@ -48,27 +48,40 @@ The code in the repository is organized in the following folder structure:
 ```
 niosh-paper/
 ├── study1/
-│   ├── functional-regression/
-│   ├── linear-regression/
-│   └── machine-learning
-│   │   ├── data/
-│   │   ├── outputs/
-│   │   ├── data_construction.ipynb
-│   │   ├── save_models_classification.ipynb
-│   │   ├── save_models_general.ipynb
-│   │   └── save_models_individual.ipynb
+│   ├── analysis/
+│   │   ├── functional-regression/
+│   │   │   └── **TODO**
+│   │   ├── linear-regression/
+│   │   │   └── **TODO**
+│   │   └── machine-learning/
+│   │       ├── save_models_classification.ipynb
+│   │       ├── save_models_general.ipynb
+│   │       └── save_models_individual.ipynb
+│   ├── data/
+│   └── outputs/
+│       ├── csv/
+│       │   ├── classification/
+│       │   ├── general/
+│       │   └── individual/
+│       └── figures/
 ├── study2/
-│   ├── functional-regression/
-│   │   └── functional_regression_case3.Rmd
-│   ├── linear-regression/
-│   │   └── **TODO**
-│   ├── machine-learning
-│   │   ├── data/
-│   │   ├── outputs/
-│   │   ├── data_construction.ipynb
-│   │   ├── save_models_classification.ipynb
-│   │   ├── save_models_general.ipynb
-│   │   └── save_models_individual.ipynb
+│   ├── analysis/
+│   │   ├── functional-regression/
+│   │   │   └── functional_regression_case3.Rmd
+│   │   ├── linear-regression/
+│   │   │   └── **TODO**
+│   │   └── machine-learning/
+│   │       ├── data_construction.ipynb
+│   │       ├── save_models_classification.ipynb
+│   │       ├── save_models_general.ipynb
+│   │       └── save_models_individual.ipynb
+│   ├── data/
+│   └── outputs/
+│       ├── csv/
+│       │   ├── classification/
+│       │   ├── general/
+│       │   └── individual/
+│       └── figures/
 ├── .gitignore
 ├── LICENSE
 ├── README.md

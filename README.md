@@ -14,7 +14,12 @@ We utilized R and Python to run those models. Specifically, we used R to run the
 Further details on how the repository is orgainzed is provided in the [repository structure](#repository-structure).
 
 ## To do:
- - It would be nice to add the Jupyter "buttons" to run your notebook on Colab and Deepnote. 
+ - [ ] Restructure directories in study2
+ - [ ] Get code for linear/logistic regression implementations
+ - [ ] Write code to get figures for machine learning
+ - [ ] It would be nice to [add the Jupyter "buttons"](https://openincolab.com/) to run notebooks on Colab or Deepnote. 
+
+
 
 ## Requirements
 

@@ -6,19 +6,11 @@ This repository contains all of the data and code used to perform the analyses d
   - **Case 2: Shoulder Internal and External Rotation Movements:** TODO Short description. 
 
 For each of those two case studies, we examine the use of three modeling approaches:  
-  - **Linear and logistic regression:** TODO
-  - Several widely used **machine learning models:** TODO
+  - **Linear and logistic regression:** We used R to run the linear regression model as well the functional regression models.
+  - Several widely used **machine learning models:** We used Python and the Pycaret library to run several machine learning models. For each model generated, we create two types, *General* and *Individual*. *General* models are trained to predict the fatigue of any potential subject provided to it. This is done by providing a model all of the data from a subset of subjects as training, then data from the remaining unseen subjects as testing. *Individual* models are specialized in predicting the fatigue of one unique subject. This is done by using data from a singular subject in both the training and testing of a model. We evaluated the predictive ability of these  models both in continuous (i.e. regression applications of machine learning models) and binary (i.e. simply identifying the presence or absence of fatigue via classification-based ML models) outcomes. We present the raw notebooks in this repository. Additionally, knitted Jupyter notebooks are hosted at [src](link).
   - **Functional regression:** TODO
-We utilized R and Python to run those models. Specifically, we used R to run the linear regression model as well the functional regression models. On the other hand, we used Python to run the machine learning models, evaluating the utility of those models in predicting continuous fatigue outcomes (i.e., regression applications of machine learning models) and binary outcomes (i.e., the presence or absence of fatigue with classification machine learning-based models). We present the raw Python and RMarkdown notebooks in the folders below. Additionally, the knitted RMarkdown HTMLs and Jupyter notebooks are available at: [src](link), [src](link), .... . 
 
 Further details on how the repository is organized are provided in the [repository structure](#repository-structure).
-
-## TODO:
- - [x] Restructure directories in study2
- - [x] Update the repository structure section to show the new structure
- - [ ] Get code for linear/logistic regression implementations
- - [ ] Add code to generate figures for machine learning (study1 and study2)
- - [ ] It would be nice to [add the Jupyter "buttons"](https://openincolab.com/) to run notebooks on Colab or Deepnote. 
 
 
 
@@ -88,5 +80,9 @@ niosh-paper/
 └── requirements.txt
 ```
 
-## Further description to come...
-
+## TODO:
+ - [x] Restructure directories in study2
+ - [x] Update the repository structure section to show the new structure
+ - [ ] Get code for linear/logistic regression implementations
+ - [ ] Add code to generate figures for machine learning (study1 and study2)
+ - [ ] It would be nice to [add the Jupyter "buttons"](https://openincolab.com/) to run notebooks on Colab or Deepnote. 

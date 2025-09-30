@@ -1,7 +1,7 @@
 # NIOSH Code
 
 ## Overview
-This repository contains all of the data and code used to perform the analyses discussed in the [PAPER NAME](URL). Our overarching hypothesis is to evaluate the utility of wearable sensors in modeling upper-extremity fatigue. To test our hypothesis, we present the following two case studies:
+This repository contains all of the data and code used to perform analyses. Our overarching hypothesis is to evaluate the utility of wearable sensors in modeling upper-extremity fatigue. To test our hypothesis, we present the following two case studies:
   - **Case 1: Dynamic Order-Picking Task:** Thirty-four healthy subjects performed shoulder Internal Rotation movements by keeping their elbow flexed to 90 degrees, their wrist straight, and rotating their arm inward towards the abdomen until they reached maximal exertion. Fatigue was self-reported using the Borg rating of perceived exertion. The paper can be found [here](https://www.nature.com/articles/s41597-024-03254-8).
   - **Case 2: Shoulder Internal and External Rotation Movements**
 

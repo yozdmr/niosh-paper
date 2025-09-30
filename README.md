@@ -39,9 +39,7 @@ niosh-paper/
 ├── study1/
 │   ├── analysis/
 │   │   ├── functional-regression/
-│   │   │   └── **TODO**
 │   │   ├── linear-regression/
-│   │   │   └── **TODO**
 │   │   └── machine-learning/
 │   │       ├── save_models_classification.ipynb
 │   │       ├── save_models_general.ipynb
@@ -58,7 +56,6 @@ niosh-paper/
 │   │   ├── functional-regression/
 │   │   │   └── functional_regression_case3.Rmd
 │   │   ├── linear-regression/
-│   │   │   └── **TODO**
 │   │   └── machine-learning/
 │   │       ├── data_construction.ipynb
 │   │       ├── save_models_classification.ipynb
@@ -76,9 +73,3 @@ niosh-paper/
 ├── README.md
 └── requirements.txt
 ```
-
- - [x] Restructure directories in study2
- - [x] Update the repository structure section to show the new structure
- - [ ] Get code for linear/logistic regression implementations
- - [ ] Add code to generate figures for machine learning (study1 and study2)
- - [ ] It would be nice to [add the Jupyter "buttons"](https://openincolab.com/) to run notebooks on Colab or Deepnote. 

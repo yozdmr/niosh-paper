@@ -1,14 +1,14 @@
-# NIOSH Code (finalize this title)
+# NIOSH Code
 
 ## Overview
 This repository contains all of the data and code used to perform the analyses discussed in the [PAPER NAME](URL). Our overarching hypothesis is to evaluate the utility of wearable sensors in modeling upper-extremity fatigue. To test our hypothesis, we present the following two case studies:
   - **Case 1: Dynamic Order-Picking Task:** Thirty-four healthy subjects performed shoulder Internal Rotation movements by keeping their elbow flexed to 90 degrees, their wrist straight, and rotating their arm inward towards the abdomen until they reached maximal exertion. Fatigue was self-reported using the Borg rating of perceived exertion. The paper can be found [here](https://www.nature.com/articles/s41597-024-03254-8).
-  - **Case 2: Shoulder Internal and External Rotation Movements:** TODO Short description. 
+  - **Case 2: Shoulder Internal and External Rotation Movements**
 
 For each of those two case studies, we examine the use of three modeling approaches:  
   - **Linear and logistic regression:** We used R to run the linear regression model as well the functional regression models.
   - Several widely used **machine learning models:** We used Python and the Pycaret library to run several machine learning models. For each model generated, we create two types, *General* and *Individual*. *General* models are trained to predict the fatigue of any potential subject provided to it. This is done by providing a model all of the data from a subset of subjects as training, then data from the remaining unseen subjects as testing. *Individual* models are specialized in predicting the fatigue of one unique subject. This is done by using data from a singular subject in both the training and testing of a model. We evaluated the predictive ability of these  models both in continuous (i.e. regression applications of machine learning models) and binary (i.e. simply identifying the presence or absence of fatigue via classification-based ML models) outcomes. We present the raw notebooks in this repository. Additionally, knitted Jupyter notebooks are hosted at [src](link).
-  - **Functional regression:** TODO
+  - **Functional regression**
 
 Further details on how the repository is organized are provided in the [repository structure](#repository-structure).
 
@@ -17,9 +17,6 @@ Further details on how the repository is organized are provided in the [reposito
 ## Requirements
 
 ### R
-TODO needs:
- - R version
- - Libraries used
 
 
 ### Python
@@ -80,7 +77,6 @@ niosh-paper/
 └── requirements.txt
 ```
 
-## TODO:
  - [x] Restructure directories in study2
  - [x] Update the repository structure section to show the new structure
  - [ ] Get code for linear/logistic regression implementations
